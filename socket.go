@@ -69,10 +69,7 @@ func (s *Socket) Emit(event string, args ...interface{}) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	println("emit", event)
-
-	c := s.Conn
-	if c == nil {
+	if s.Conn == nil {
 		return errors.New("socket has disconnected")
 	}
 
@@ -114,6 +111,7 @@ func (s *Socket) Ping() error {
 func (s *Socket) Disconnect() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
 	if s.Conn == nil {
 		return errors.New("socket has disconnected")
 	}
@@ -128,9 +126,10 @@ func (s *Socket) Rooms() []string {
 }
 
 func (s *Socket) disconnect() {
+
 	s.Conn.Close()
 	s.Conn = nil
-	// s.rooms = []string{}
+
 	if len(s.dispose) > 0 {
 		for _, dispose := range s.dispose {
 			dispose()
