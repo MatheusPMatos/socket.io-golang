@@ -69,6 +69,8 @@ func (s *Socket) Emit(event string, args ...interface{}) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	println("emit", event)
+
 	c := s.Conn
 	if c == nil {
 		return errors.New("socket has disconnected")
